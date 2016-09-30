@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `mcsessions`(`session_id` int(10) NOT NULL AUTO_INCRE
 </cfquery>
 
 <cfscript>
-	if (url.returnURL NEQ "" AND url.muraAction NEQ "clogin.main") {
+	if (url.returnURL NEQ "") {
 		pageURL = url.returnURL;
 	} else {
 		pageURL = "https://"&CGI.SERVER_NAME&"/";
@@ -61,5 +61,7 @@ SELECT * FROM `mcsessions` WHERE `ticket` = <cfqueryparam value="#ticketVal#">
 		INSERT INTO `mcsessions` (`loginlocation`,`useripaddress`) VALUES (<cfqueryparam value="#redirect#">,<cfqueryparam value="#CGI.REMOTE_ADDR#">)
 		</cfquery>
 		<cflocation url="#cas_url#" addtoken="no">
+		<cfelse>
+			<cfinclude template="caslogininc.cfm" />
 	</cfif>
 </cfif>

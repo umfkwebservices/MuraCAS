@@ -13,10 +13,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 <cfparam name="url.ticket" default="">
 <!--- auth check --->
 <!--- check to see if there is a valid session already in place --->
-<cfif url.ticket NEQ "">
+<cfif IsDefined("ticketVal") AND ticketVal NEQ "">
+	<cfset ticketVal = ticketVal>
+<cfelseif url.ticket NEQ "">
 	<cfset ticketVal = url.ticket>
 	<cfelse>
-<cfset ticketVal = "">
+		<cfset ticketVal = "">
 </cfif>
 <cfquery name="validateAuth" datasource="#pluginConfig.getSetting('muraDatasource')#">
 SELECT * FROM `mcsessions` WHERE `ticket` = <cfqueryparam value="#ticketVal#">
@@ -24,7 +26,7 @@ SELECT * FROM `mcsessions` WHERE `ticket` = <cfqueryparam value="#ticketVal#">
 
 <cfif validateAuth.recordCount EQ 0>
 
-	<cfif Len(Trim(url.ticket))>
+	<cfif Len(Trim(ticketVal))>
 		<!--- get the temporarily stored information from the initial login --->
 		<cfquery name="gettempinfo" datasource="#pluginConfig.getSetting('muraDatasource')#">
 		SELECT * FROM `mcsessions` WHERE `useripaddress` = <cfqueryparam value="#CGI.REMOTE_ADDR#"> ORDER BY `logindt` DESC LIMIT 1
@@ -104,5 +106,4 @@ SELECT * FROM `mcsessions` WHERE `ticket` = <cfqueryparam value="#ticketVal#">
 		</cfscript>
 		<cfset doUserLogin = application.loginManager.loginByUserID(loginData,"")>
 	</cfif>
-
 </cfif>
