@@ -66,7 +66,7 @@ SELECT * FROM `mcsessions` WHERE `ticket` = <cfqueryparam value="#ticketVal#">
 			UPDATE `mcsessions` SET `username`=<cfqueryparam value="#uid#">, `email`=<cfqueryparam value="#emailAddress#">, `authorized`=<cfqueryparam value="#isAuthorized#">, `ticket`=<cfqueryparam value="#ticketVal#"> WHERE `session_id` = <cfqueryparam value="#gettempinfo.session_id#">
 			</cfquery>
 			<cfelse>
-				<cflocation url="#cas_url#" addtoken="no">
+				<cfinclude template="casauthinc.cfm" />
 		</cfif>
 		<!---Look for an account with the user identifier returned by CAS--->
 		<cfquery name="userdata" datasource="#pluginConfig.getSetting('muraDatasource')#">

@@ -61,7 +61,5 @@ SELECT * FROM `mcsessions` WHERE `ticket` = <cfqueryparam value="#ticketVal#">
 		INSERT INTO `mcsessions` (`loginlocation`,`useripaddress`) VALUES (<cfqueryparam value="#redirect#">,<cfqueryparam value="#CGI.REMOTE_ADDR#">)
 		</cfquery>
 		<cflocation url="#cas_url#" addtoken="no">
-		<cfelse>
-			<cfinclude template="caslogininc.cfm" />
 	</cfif>
 </cfif>
