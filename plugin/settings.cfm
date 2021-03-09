@@ -1,9 +1,9 @@
 <cfscript>
 /**
-* 
+*
 * This file is part of MuraCAS
 *
-* Copyright 2016 University of Maine at Fort Kent
+* Copyright 2021 University of Maine at Fort Kent
 * Licensed under the Apache License, Version v2.0
 * http://www.apache.org/licenses/LICENSE-2.0
 *
@@ -12,7 +12,7 @@
 		pluginName = 'MuraCAS'
 		, package = 'MuraCAS'
 		, loadPriority = 5
-		, version = '1.3'
+		, version = '2.0'
 		, provider = 'University of Maine at Fort Kent'
 		, providerURL = 'https://www.umfk.edu'
 		, category = 'Application'

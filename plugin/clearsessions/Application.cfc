@@ -14,15 +14,15 @@ component accessors=true output=false {
 	local.pluginPath = GetDirectoryFromPath(GetCurrentTemplatePath());
 	local.muraroot = Left(local.pluginPath, Find('plugins', local.pluginPath, 1) - 1);
 	if (DirectoryExists(local.muraroot & 'core')) {
-		this.muraAppConfigPath = '../../core/appcfc/';
+		this.muraAppConfigPath = '../../../core/appcfc/';
 	} else {
-		this.muraAppConfigPath = '../../config/';
+		this.muraAppConfigPath = '../../../config/';
 	}
-	include 'plugin/settings.cfm';
+	include '../settings.cfm';
 	include this.muraAppConfigPath & 'applicationSettings.cfm';
 	try {
 		include this.muraAppConfigPath & 'mappings.cfm';
-		include '../mappings.cfm';
+		include '../../mappings.cfm';
 	} catch(any e) {}
 
 	public any function onApplicationStart() {
@@ -47,9 +47,6 @@ component accessors=true output=false {
 				setupSession();
 			}
 		}
-
-		// You may want to change the methods being used to secure the request
-		secureRequest();
 		return true;
 	}
 
@@ -94,24 +91,9 @@ component accessors=true output=false {
 		return arguments.$;
 	}
 
-	public any function secureRequest() {
-		var $ = get$();
-		return !inPluginDirectory() || $.currentUser().isSuperUser()
-			? true
-			: ( inPluginDirectory() && !StructKeyExists(session, 'siteid') )
-				|| ( inPluginDirectory() && !$.getBean('permUtility').getModulePerm($.getPlugin(variables.settings.pluginName).getModuleID(),session.siteid) )
-				? goToLogin()
-				: true;
-	}
-
 	public boolean function inPluginDirectory() {
 		var uri = getPageContext().getRequest().getRequestURI();
 		return ListFindNoCase(uri, 'plugins', '/') && ListFindNoCase(uri, variables.settings.package,'/');
-	}
-
-	private void function goToLogin() {
-		var $ = get$();
-		location(url='#$.globalConfig('context')#/admin/index.cfm?muraAction=clogin.main&returnURL=#$.globalConfig('context')#/plugins/#$.getPlugin(variables.settings.pluginName).getPackage()#/', addtoken=false);
 	}
 
 	private boolean function isRequestExpired() {

@@ -2,7 +2,7 @@
 
 This file is part of MuraCAS
 
-Copyright 2016 University of Maine at Fort Kent
+Copyright 2021 University of Maine at Fort Kent
 Licensed under the Apache License, Version v2.0
 http://www.apache.org/licenses/LICENSE-2.0
 
@@ -10,56 +10,46 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 <!--- include file to check for valid CAS authentication --->
 
-<cfparam name="url.returnURL" default="">
-<cfparam name="url.ticket" default="">
-<cfparam name="url.muraAction" default="">
-
-<cfquery name="chkDBTable" datasource="#pluginConfig.getSetting('muraDatasource')#">
-CREATE TABLE IF NOT EXISTS `mcsessions`(`session_id` int(10) NOT NULL AUTO_INCREMENT, `username` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL, `email` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL, `authorized` tinyint(1) DEFAULT '0', `ticket` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL, `loginlocation` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL, `useripaddress` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL, `logindt` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (`session_id`)) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci
-</cfquery>
-
-<cfscript>
-	if (url.returnURL NEQ "") {
-		pageURL = url.returnURL;
-	} else {
-		pageURL = "https://"&CGI.SERVER_NAME&"/";
-	};
-	pageURL = ReplaceNoCase(pageURL,":80","","all");
-	pageURL = ReplaceNoCase(pageURL,":443","","all");
-	
-	if (pageURL NEQ "") {
-		chkFile = GetFileFromPath(pageURL);
-		if (Len(chkFile) GT 0) {
-			app_path = ReplaceNoCase(pageURL,chkFile,"","all");
-		} else {
-			app_path = pageURL;
-		};
-		redirect = pageURL;
-	} else {
-		redirect = "https://"&CGI.SERVER_NAME&"/";
-		app_path = "https://"&CGI.SERVER_NAME&"/";
-	}
-	cas_path = pluginConfig.getSetting("casServer");
-	cas_url = cas_path & "login?" & "service=" & app_path;
-	appcode = "";
-</cfscript>
+<cfset ticketVal = "" />
+<cfif url.returnURL NEQ "">
+	<cfset pageURL = url.returnURL />
+	<!--- check to see if there is a ticket in the return URL --->
+	<cfset decodedUrl = URLDecode(url.returnURL) />
+	<cfset startpos = findNoCase("?ticket=",decodedUrl) + 7 />
+	<cfset remStr = Left(decodedUrl,startpos) />
+	<cfset ticketVal = replaceNoCase(decodedUrl,remStr,"","all") />
+	<cfelse>
+		<cfset pageURL = "https://"&CGI.SERVER_NAME&"/" />
+</cfif>
+<!--- remove standard ports from the pageURL --->
+<cfset pageURL = ReplaceNoCase(pageURL,":80","","all") />
+<cfset pageURL = ReplaceNoCase(pageURL,":443","","all") />
+<cfset chkFile = GetFileFromPath(pageURL) />
+<cfif Len(chkFile) GT 0>
+	<cfset app_path = ReplaceNoCase(pageURL,chkFile,"","all") />
+	<cfelse>
+		<cfset app_path = pageURL />
+</cfif>
+<cfset redirect = pageURL />
+<cfset cas_path = pluginConfig.getSetting("casServer") />
+<cfset cas_url = cas_path & "login?" & "service=" & app_path />
+<cfset appcode = "" />
 
 <!--- auth check --->
-<!--- check to see if there is a valid session already in place --->
+<!--- check to see if there is a ticket as a URL parameter--->
 <cfif url.ticket NEQ "">
-	<cfset ticketVal = url.ticket>
-	<cfelse>
-		<cfset ticketVal = "">
+	<cfset ticketVal = url.ticket />
 </cfif>
-<cfquery name="validateAuth" datasource="#pluginConfig.getSetting('muraDatasource')#">
-SELECT * FROM `mcsessions` WHERE `ticket` = <cfqueryparam value="#ticketVal#">
-</cfquery>
+<!--- check if a session matches this ticket and is not expired; if not, check for a non-expired session based on IP --->
+<cfif ticketVal NEQ "">
+	<cfset qType = "validateAuth" />
+	<cfelse>
+		<cfset qType = "validateAuthIP" />
+</cfif>
+<cfinclude template="authqueries.cfm" />
+
 <cfif validateAuth.recordCount EQ 0>
-	<cfif not len(trim(ticketVal))>
-		<!--- temporarily store the redirect value to pull the information back into the script after CAS authentication --->
-		<cfquery name="storetmpredirect" datasource="#pluginConfig.getSetting('muraDatasource')#">
-		INSERT INTO `mcsessions` (`loginlocation`,`useripaddress`) VALUES (<cfqueryparam value="#redirect#">,<cfqueryparam value="#CGI.REMOTE_ADDR#">)
-		</cfquery>
-		<cflocation url="#cas_url#" addtoken="no">
-	</cfif>
+	<cfset qType = "storeTmpRedirect" />
+	<cfinclude template="authqueries.cfm" />
+	<cflocation url="#cas_url#" addtoken="no" />
 </cfif>
