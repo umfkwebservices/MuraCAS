@@ -12,7 +12,7 @@
 		pluginName = 'MuraCAS'
 		, package = 'MuraCAS'
 		, loadPriority = 5
-		, version = '2.0'
+		, version = '2.0.1'
 		, provider = 'University of Maine at Fort Kent'
 		, providerURL = 'https://www.umfk.edu'
 		, category = 'Application'

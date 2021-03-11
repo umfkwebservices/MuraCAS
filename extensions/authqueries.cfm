@@ -25,7 +25,6 @@ possible values:
 <cfparam name="uid" default="" />
 <cfparam name="emailAddress" default="" />
 <cfparam name="isAuthorized" default="" />
-<cfparam name="gettempinfo.session_id" default="" />
 
 <!--- set the expiration date/time to compare against --->
 <cfset timeoutVal = pluginConfig.getSetting('casDuration') />
@@ -60,10 +59,12 @@ possible values:
 		</cfquery>
 	</cfcase>
 	<cfcase value="updateAuth">
-		<!--- if authorized, update the temp user info to include additional data needed to indicate a valid session --->
-		<cfquery name="updateAuth" datasource="#$.GlobalConfig().get('datasource')#">
-		UPDATE `mcsessions` SET `username`=<cfqueryparam value="#uid#" />, `email`=<cfqueryparam value="#emailAddress#" />, `authorized`=<cfqueryparam value="#isAuthorized#" />, `ticket`=<cfqueryparam value="#ticketVal#" /> WHERE `session_id` = <cfqueryparam value="#gettempinfo.session_id#" />
-		</cfquery>
+		<cfif IsDefined(gettempinfo.session_id)>
+			<!--- if authorized, update the temp user info to include additional data needed to indicate a valid session --->
+			<cfquery name="updateAuth" datasource="#$.GlobalConfig().get('datasource')#">
+			UPDATE `mcsessions` SET `username`=<cfqueryparam value="#uid#" />, `email`=<cfqueryparam value="#emailAddress#" />, `authorized`=<cfqueryparam value="#isAuthorized#" />, `ticket`=<cfqueryparam value="#ticketVal#" /> WHERE `session_id` = <cfqueryparam value="#gettempinfo.session_id#" />
+			</cfquery>
+		</cfif>
 	</cfcase>
 	<cfcase value="getUserData">
 		<!---Look for an account with the user identifier returned by CAS--->
