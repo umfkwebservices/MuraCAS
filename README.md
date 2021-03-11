@@ -3,7 +3,10 @@
 This plugin allows CAS authentication for the Mura admin console, and optionally, site users.
 
 
-##Updates to this version:
+##Updates in this version:
+* Fixed a bug in the authqueries.cfm extension where the empty parameter referencing a query value (gettempinfo.session_id) caused an error. Now, rather than an invalid parameter, IsDefined is used to check if the value exists.
+
+##Updates in version 2.0:
 * Added a setting to select whether public users login through CAS or through Mura's native authentication
 * Added a setting for the duration of a CAS session before it times out
 * Moved database table creation and deletion to the plugin.cfc under install and delete functions, respectively (as it should have been)

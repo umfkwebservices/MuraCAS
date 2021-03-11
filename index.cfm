@@ -19,7 +19,13 @@
 <div id="bodyWrap">
 	<h1><strong>#esapiEncode('html', pluginConfig.getName())# #pluginConfig.getVersion()#</strong></h1>
 	<p>This is a plugin to allow CAS authentication for Mura. It overrides Mura's built-in login in favor of your selected CAS server.</p>
-	<h2>Updates to this version:</h2>
+
+	<h2>Updates in this version:</h2>
+	<ul>
+		<li>Fixed a bug in the authqueries.cfm extension where the empty parameter referencing a query value (gettempinfo.session_id) caused an error. Now, rather than an invalid parameter, IsDefined is used to check if the value exists.</li>
+	</ul>
+
+	<h2>Updates in version 2.0:</h2>
 	<ul>
 		<li>Added a setting to select whether public users login through CAS or through Mura's native authentication</li>
 		<li>Added a setting for the duration of a CAS session before it times out</li>
