@@ -33,6 +33,7 @@
 	<ul>
 		<li>Changed how methods are invoked to correct issue of some browsers not replacing the default Mura login prompt with the CAS prompt</li>
 		<li>Changed default load priority to 1</li>
+		<li>While the option to set whether public users authenticate via CAS or Mura's built-in authentication, it currently does nothing, as disabling the public CAS authentication also disabled admin CAS authentication in some browsers</li>
 	</ul>
 
 	<h2>Updates in version 2.0.1:</h2>

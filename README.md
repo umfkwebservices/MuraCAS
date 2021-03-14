@@ -11,6 +11,7 @@ This plugin allows CAS authentication for the Mura admin console, and optionally
 ##Updates in this version:
 * Changed onAdminHTMLHeadRender method to onAdminRequestStart and added onApplicationLoad method to address browsers not replacing the Mura login prompt with the CAS prompt when loading the site admin
 * Changed default load priority to 1
+* While the option to set whether public users authenticate via CAS or Mura's built-in authentication, it currently does nothing, as disabling the public CAS authentication also disabled admin CAS authentication in some browsers
 
 
 ##Updates in version 2.0.1:
