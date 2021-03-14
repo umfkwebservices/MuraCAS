@@ -11,8 +11,8 @@
 	variables.settings = {
 		pluginName = 'MuraCAS'
 		, package = 'MuraCAS'
-		, loadPriority = 5
-		, version = '2.0.1'
+		, loadPriority = 1
+		, version = '2.0.2'
 		, provider = 'University of Maine at Fort Kent'
 		, providerURL = 'https://www.umfk.edu'
 		, category = 'Application'

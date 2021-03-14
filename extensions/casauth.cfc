@@ -8,13 +8,22 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 --->
 <cfcomponent extends="mura.plugin.pluginGenericEventHandler">
+	<cffunction name="onApplicationLoad">
+		<cfparam name="url.returnURL" default="" />
+		<cfparam name="url.ticket" default="" />
+		<cfinclude template="casauthinc.cfm" />
+	</cffunction>
+
+	<cffunction name="onAdminRequestStart">
+		<cfparam name="url.returnURL" default="" />
+		<cfparam name="url.ticket" default="" />
+		<cfinclude template="casauthinc.cfm" />
+	</cffunction>
+
 	<cffunction name="onSiteLoginPromptRender">
-		<cfset casPublic = pluginConfig.getSetting('casForPub') />
-		<cfif casPublic EQ 'yes'>
-			<cfparam name="url.returnURL" default="" />
-			<cfparam name="url.ticket" default="" />
-			<cfinclude template="casauthinc.cfm" />
-		</cfif>
+		<cfparam name="url.returnURL" default="" />
+		<cfparam name="url.ticket" default="" />
+		<cfinclude template="casauthinc.cfm" />
 	</cffunction>
 
 	<cffunction name="standardRequireLoginHandler">
@@ -27,17 +36,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 			<cfset pageURL = pageURL & "s" />
 		</cfif>
 		<cfset pageURL = pageURL & "://" & thisSiteDomain & thisPage />
-
 		<cfparam name="url.returnURL" default="#pageURL#" />
 		<cfparam name="url.ticket" default="" />
 		<cfparam name="url.showadmin" default="false" />
 		<cfinclude template="caslogininc.cfm" />
-	</cffunction>
-
-	<cffunction name="onAdminHTMLHeadRender">
-		<cfparam name="url.returnURL" default="" />
-		<cfparam name="url.ticket" default="" />
-		<cfinclude template="casauthinc.cfm" />
 	</cffunction>
 
 	<cffunction name="onRenderStart">

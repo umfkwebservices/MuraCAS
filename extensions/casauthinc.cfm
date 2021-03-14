@@ -9,7 +9,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 --->
 
 <!--- include file to check for valid CAS authentication --->
-
+<cfparam name="url.muraAction" default="" />
+<cfset casPublic = pluginConfig.getSetting('casForPub') />
 <cfset ticketVal = "" />
 <cfif url.returnURL NEQ "">
 	<cfset pageURL = url.returnURL />

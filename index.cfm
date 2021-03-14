@@ -20,9 +20,24 @@
 	<h1><strong>#esapiEncode('html', pluginConfig.getName())# #pluginConfig.getVersion()#</strong></h1>
 	<p>This is a plugin to allow CAS authentication for Mura. It overrides Mura's built-in login in favor of your selected CAS server.</p>
 
+	<h2>Known Issues:</h2>
+	<ul>
+		<li>Sometimes, going directly to the Mura dashboard URL (http(s)://{site domain}/admin/) without first visiting a page on the site results in displaying the Mura login prompt instead of the CAS login prompt
+		<ul>
+			<li><strong>Work Around:</strong> use your site domain with the URL parameter showadmin=true (http(s)://{site domain}/?showadmin=true)</li>
+		</ul>
+		</li>
+	</ul>
+
 	<h2>Updates in this version:</h2>
 	<ul>
-		<li>Fixed a bug in the authqueries.cfm extension where the empty parameter referencing a query value (gettempinfo.session_id) caused an error. Now, rather than an invalid parameter, IsDefined is used to check if the value exists.</li>
+		<li>Changed how methods are invoked to correct issue of some browsers not replacing the default Mura login prompt with the CAS prompt</li>
+		<li>Changed default load priority to 1</li>
+	</ul>
+
+	<h2>Updates in version 2.0.1:</h2>
+	<ul>
+		<li>Fixed a bug in the authqueries.cfm extension where the empty parameter referencing a query value (gettempinfo.session_id) caused an error.</li>
 	</ul>
 
 	<h2>Updates in version 2.0:</h2>

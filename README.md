@@ -3,8 +3,19 @@
 This plugin allows CAS authentication for the Mura admin console, and optionally, site users.
 
 
+##Known Issues:
+* Sometimes, going directly to the Mura dashboard URL (http(s)://{site domain}/admin/) without first visiting a page on the site results in displaying the Mura login prompt instead of the CAS login prompt
+	* Work Around: use your site domain with the URL parameter showadmin=true (http(s)://{site domain}/?showadmin=true)
+
+
 ##Updates in this version:
+* Changed onAdminHTMLHeadRender method to onAdminRequestStart and added onApplicationLoad method to address browsers not replacing the Mura login prompt with the CAS prompt when loading the site admin
+* Changed default load priority to 1
+
+
+##Updates in version 2.0.1:
 * Fixed a bug in the authqueries.cfm extension where the empty parameter referencing a query value (gettempinfo.session_id) caused an error. Now, rather than an invalid parameter, IsDefined is used to check if the value exists.
+
 
 ##Updates in version 2.0:
 * Added a setting to select whether public users login through CAS or through Mura's native authentication

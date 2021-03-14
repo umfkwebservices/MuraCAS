@@ -72,9 +72,10 @@ include 'settings.cfm';
 		<!-- Event Handlers -->
 		<eventHandlers>
 			<!-- only need to register the eventHandler.cfc via onApplicationLoad() -->
+			<eventHandler event="onApplicationLoad" component="extensions.casauth" persist="false" />
+			<eventHandler event="onAdminRequestStart" component="extensions.casauth" persist="false" />
 			<eventHandler event="onSiteLoginPromptRender" component="extensions.casauth" persist="false" />
 			<eventhandler event="standardRequireLoginHandler" component="extensions.casauth" persist="false" />
-			<eventHandler event="onAdminHTMLHeadRender" component="extensions.casauth" persist="false" />
 			<eventHandler event="onRenderStart" component="extensions.casauth" persist="false" />
 			<eventHandler event="onAfterSiteLogout" component="extensions.casauth" persist="false" />
 			<eventHandler event="onGlobalLogout" component="extensions.casauth" persist="false" />
